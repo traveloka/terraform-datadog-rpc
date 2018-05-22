@@ -7,8 +7,8 @@ Terraform module for Datadog Monitor RPC.
 
 Usage
 -----
-* [Simple Example](https://github.com/traveloka/terraform-datadog-monitor-rpc/tree/master/examples/simple)
-* [Complete Example](https://github.com/traveloka/terraform-datadog-monitor-rpc/tree/master/examples/complete)
+* [Simple Example](https://github.com/traveloka/terraform-datadog-rpc/tree/master/monitor/examples/simple)
+* [Complete Example](https://github.com/traveloka/terraform-datadog-rpc/tree/master/monitor/examples/complete)
 
 Terraform Version
 -----------------
