@@ -10,7 +10,7 @@ Usage
 
 ```hcl
 module "timeboard_rpc_beical-app" {
-  source         = "github.com/traveloka/terraform-datadog-rpc.git//timeboard"
+  source         = "github.com/traveloka/terraform-datadog-rpc//timeboard"
   product_domain = "${var.product_domain}"
   cluster        = "${var.cluster}"
 }

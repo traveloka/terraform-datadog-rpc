@@ -1,5 +1,5 @@
 module "server_latency_p95" {
-  source  = "github.com/traveloka/terraform-datadog-monitor?ref=v0.1.3"
+  source  = "github.com/traveloka/terraform-datadog-monitor"
   enabled = "${var.enabled}"
 
   product_domain = "${var.product_domain}"
@@ -18,7 +18,7 @@ module "server_latency_p95" {
 }
 
 module "server_exception" {
-  source  = "github.com/traveloka/terraform-datadog-monitor?ref=v0.1.3"
+  source  = "github.com/traveloka/terraform-datadog-monitor"
   enabled = "${var.enabled}"
 
   product_domain = "${var.product_domain}"
@@ -37,7 +37,7 @@ module "server_exception" {
 }
 
 module "client_latency_p95" {
-  source  = "github.com/traveloka/terraform-datadog-monitor?ref=v0.1.3"
+  source  = "github.com/traveloka/terraform-datadog-monitor"
   enabled = "${var.enabled}"
 
   product_domain = "${var.product_domain}"
@@ -56,7 +56,7 @@ module "client_latency_p95" {
 }
 
 module "client_exception" {
-  source  = "github.com/traveloka/terraform-datadog-monitor?ref=v0.1.3"
+  source  = "github.com/traveloka/terraform-datadog-monitor"
   enabled = "${var.enabled}"
 
   product_domain = "${var.product_domain}"
@@ -75,7 +75,7 @@ module "client_exception" {
 }
 
 module "circuit_breaker_status" {
-  source  = "github.com/traveloka/terraform-datadog-monitor?ref=v0.1.3"
+  source  = "github.com/traveloka/terraform-datadog-monitor"
   enabled = "${var.enabled}"
 
   product_domain = "${var.product_domain}"
