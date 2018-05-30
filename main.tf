@@ -104,7 +104,7 @@ resource "datadog_timeboard" "rpc" {
   }
 }
 
-module "server_latency_p95" {
+module "monitor_server_latency_p95" {
   source  = "github.com/traveloka/terraform-datadog-monitor"
   enabled = "${var.enabled}"
 
@@ -124,7 +124,7 @@ module "server_latency_p95" {
   notify_audit      = "${var.notify_audit}"
 }
 
-module "server_exception" {
+module "monitor_server_exception" {
   source  = "github.com/traveloka/terraform-datadog-monitor"
   enabled = "${var.enabled}"
 
@@ -144,7 +144,7 @@ module "server_exception" {
   notify_audit      = "${var.notify_audit}"
 }
 
-module "client_latency_p95" {
+module "monitor_client_latency_p95" {
   source  = "github.com/traveloka/terraform-datadog-monitor"
   enabled = "${var.enabled}"
 
@@ -164,7 +164,7 @@ module "client_latency_p95" {
   notify_audit      = "${var.notify_audit}"
 }
 
-module "client_exception" {
+module "monitor_client_exception" {
   source  = "github.com/traveloka/terraform-datadog-monitor"
   enabled = "${var.enabled}"
 
@@ -184,7 +184,7 @@ module "client_exception" {
   notify_audit      = "${var.notify_audit}"
 }
 
-module "circuit_breaker_status" {
+module "monitor_circuit_breaker_status" {
   source  = "github.com/traveloka/terraform-datadog-monitor"
   enabled = "${var.enabled}"
 
