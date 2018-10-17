@@ -104,17 +104,6 @@ resource "datadog_timeboard" "rpc" {
   }
   
   graph {
-    title     = "Circuit Breaker"
-    viz       = "timeseries"
-    autoscale = true
-
-    request {
-      q    = "sum:rpc.server.exc.count{$cluster, $environment,$classname,$methodname} by {host,name,classname,methodname}"
-      type = "line"
-    }
-  }
-  
-  graph {
     title     = "Circuit Breaker State"
     viz       = "timeseries"
     autoscale = true
