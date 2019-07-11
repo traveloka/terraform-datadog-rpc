@@ -106,7 +106,7 @@ resource "datadog_timeboard" "rpc" {
     autoscale = true
 
     request {
-      q    = "sum:rpc.server.exc.count{$cluster, $environment,$classname,$methodname, $srcnodeid} by {host,name,classname,methodname}.rollup(sum)"
+      q    = "sum:rpc.server.exc.count{$cluster, $environment,$classname,$methodname, $srcnodeid} by {host,name,classname,methodname,srcnodeid}.rollup(sum)"
       type = "line"
     }
   }
