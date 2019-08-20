@@ -1,5 +1,7 @@
 locals {
   monitor_enabled = "${var.enabled && length(var.recipients) > 0 ? 1 : 0}"
+  server_latency_p95_default_query = "avg(last_1m):avg:rpc.server.ltcy.p95{cluster:${var.cluster}, environment:${var.environment}} by {host,classname,methodname} >= ${var.server_latency_p95_thresholds["critical"]}"
+  server_latency_p95_query = "${coalesce(var.server_latency_p95_custom_query, local.server_latency_p95_default_query)}"
 }
 
 resource "datadog_timeboard" "rpc" {
@@ -161,7 +163,7 @@ module "monitor_server_latency_p95" {
   timeboard_id   = "${join(",", datadog_timeboard.rpc.*.id)}"
 
   name               = "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Server Latency is High on Class: {{ classname }} Method: {{ methodname }}"
-  query              = "avg(last_1m):avg:rpc.server.ltcy.p95{cluster:${var.cluster}, environment:${var.environment}} by {host,classname,methodname} >= ${var.server_latency_p95_thresholds["critical"]}"
+  query              = "${local.server_latency_p95_query}"
   thresholds         = "${var.server_latency_p95_thresholds}"
   message            = "${var.server_latency_p95_message}"
   escalation_message = "${var.server_latency_p95_escalation_message}"

@@ -71,6 +71,12 @@ variable "server_latency_p95_thresholds" {
   description = "The warning and critical thresholds for RPC Server Latency P95 monitoring"
 }
 
+variable "server_latency_p95_custom_query" {
+  type        = "string"
+  default     = "last_1m"
+  description = "The custom query for RPC Server Latency P95 monitoring"
+}
+
 variable "server_latency_p95_message" {
   type        = "string"
   default     = ""
