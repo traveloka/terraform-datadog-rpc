@@ -1,16 +1,10 @@
 locals {
   monitor_enabled = "${var.enabled && length(var.recipients) > 0 ? 1 : 0}"
   server_latency_p95_default_query = "avg(last_1m):avg:rpc.server.ltcy.p95{cluster:${var.cluster}, environment:${var.environment}} by {host,classname,methodname} >= ${var.server_latency_p95_thresholds["critical"]}"
-  server_latency_p95_query = "${coalesce(var.server_latency_p95_custom_query, local.server_latency_p95_default_query)}"
   server_exception_default_query = "avg(last_1m):avg:rpc.server.exc.count{cluster:${var.cluster}, environment:${var.environment}} by {host,classname,methodname} >= ${var.server_exception_thresholds["critical"]}"
-  server_exception_query = "${coalesce(var.server_exception_custom_query, local.server_exception_default_query)}"
   client_latency_p95_default_query = "avg(last_1m):avg:rpc.client.ltcy.p95{cluster:${var.cluster}, environment:${var.environment}} by {host,classname,methodname} >= ${var.client_latency_p95_thresholds["critical"]}"
-  client_latency_p95_query = "${coalesce(var.client_latency_p95_custom_query, local.client_latency_p95_default_query)}"  
   client_exception_default_query = "avg(last_1m):avg:rpc.client.exc.count{cluster:${var.cluster}, environment:${var.environment}} by {host,classname,methodname} >= ${var.client_exception_thresholds["critical"]}"
-  client_exception_query = "${coalesce(var.client_exception_custom_query, local.client_exception_default_query)}"
-  circuit_breaker_status_default_query = "avg(last_1m):avg:CircuitBreaker.status.lastNumber{cluster:${var.cluster}, environment:${var.environment}} by {host,classname,methodname} >= ${var.circuit_breaker_status_thresholds["critical"]}"
-  circuit_breaker_status_query = "${coalesce(var.circuit_breaker_status_custom_query, local.circuit_breaker_status_default_query)}" 
-}
+  circuit_breaker_status_default_query = "avg(last_1m):avg:CircuitBreaker.status.lastNumber{cluster:${var.cluster}, environment:${var.environment}} by {host,classname,methodname} >= ${var.circuit_breaker_status_thresholds["critical"]}"}
 
 resource "datadog_timeboard" "rpc" {
   count = "${var.enabled ? 1 : 0}"
@@ -171,7 +165,7 @@ module "monitor_server_latency_p95" {
   timeboard_id   = "${join(",", datadog_timeboard.rpc.*.id)}"
 
   name               = "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Server Latency is High on Class: {{ classname }} Method: {{ methodname }}"
-  query              = "${local.server_latency_p95_query}"
+  query              = "${coalesce(var.server_latency_p95_custom_query, local.server_latency_p95_default_query)}"
   thresholds         = "${var.server_latency_p95_thresholds}"
   message            = "${var.server_latency_p95_message}"
   escalation_message = "${var.server_latency_p95_escalation_message}"
@@ -195,7 +189,7 @@ module "monitor_server_exception" {
   timeboard_id   = "${join(",", datadog_timeboard.rpc.*.id)}"
 
   name               = "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Server Exception is High on Class: {{ classname }} Method: {{ methodname }}"
-  query              = "${local.server_exception_query}"
+  query              = "${coalesce(var.server_exception_custom_query, local.server_exception_default_query)}"
   thresholds         = "${var.server_exception_thresholds}"
   message            = "${var.server_exception_message}"
   escalation_message = "${var.server_exception_escalation_message}"
@@ -219,7 +213,7 @@ module "monitor_client_latency_p95" {
   timeboard_id   = "${join(",", datadog_timeboard.rpc.*.id)}"
 
   name               = "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Client Latency is High on Method: {{ methodname }} Destination: {{ destnodeid }}"
-  query              = "${local.client_latency_p95_query}"
+  query              = "${coalesce(var.client_latency_p95_custom_query, local.client_latency_p95_default_query)}"
   thresholds         = "${var.client_latency_p95_thresholds}"
   message            = "${var.client_latency_p95_message}"
   escalation_message = "${var.client_latency_p95_escalation_message}"
@@ -243,7 +237,7 @@ module "monitor_client_exception" {
   timeboard_id   = "${join(",", datadog_timeboard.rpc.*.id)}"
 
   name               = "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Client Exception is High on Method: {{ methodname }} Destination: {{ destnodeid }}"
-  query              = "${local.client_exception_query}"
+  query              = "${coalesce(var.client_exception_custom_query, local.client_exception_default_query)}"
   thresholds         = "${var.client_exception_thresholds}"
   message            = "${var.client_exception_message}"
   escalation_message = "${var.client_exception_escalation_message}"
@@ -267,7 +261,7 @@ module "monitor_circuit_breaker_status" {
   timeboard_id   = "${join(",", datadog_timeboard.rpc.*.id)}"
 
   name               = "${var.product_domain} - ${var.cluster} - ${var.environment} - Circuit Breaker is Open on Class: {{ classname }} Method: {{ methodname }}"
-  query              = "${local.circuit_breaker_status_query}"
+  query              = "${coalesce(var.circuit_breaker_status_custom_query, local.circuit_breaker_status_default_query)}" 
   thresholds         = "${var.circuit_breaker_status_thresholds}"
   message            = "${var.circuit_breaker_status_message}"
   escalation_message = "${var.circuit_breaker_status_escalation_message}"
