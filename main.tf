@@ -1,5 +1,8 @@
 locals {
   monitor_enabled = "${var.enabled && length(var.recipients) > 0 ? 1 : 0}"
+  with_host = "host,classname,methodname"
+  without_host = "classname,methodname"
+  alert_by = "${var.alert_per_host ? local.with_host : local.without_host}"
 }
 
 resource "datadog_timeboard" "rpc" {
@@ -161,7 +164,7 @@ module "monitor_server_latency_p95" {
   timeboard_id   = "${join(",", datadog_timeboard.rpc.*.id)}"
 
   name               = "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Server Latency is High on Class: {{ classname }} Method: {{ methodname }}"
-  query              = "${coalesce(var.server_latency_p95_custom_query, "avg(last_1m):avg:rpc.server.ltcy.p95{cluster:${var.cluster}, environment:${var.environment}} by {host,classname,methodname} >= ${var.server_latency_p95_thresholds["critical"]}")}"
+  query              = "${coalesce(var.server_latency_p95_custom_query, "avg(last_1m):avg:rpc.server.ltcy.p95{cluster:${var.cluster}, environment:${var.environment}} by ${local.alert_by} >= ${var.server_latency_p95_thresholds["critical"]}")}"
   thresholds         = "${var.server_latency_p95_thresholds}"
   message            = "${var.server_latency_p95_message}"
   escalation_message = "${var.server_latency_p95_escalation_message}"
