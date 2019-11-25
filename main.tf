@@ -1,7 +1,7 @@
 locals {
   monitor_enabled = "${var.enabled && length(var.recipients) > 0 ? 1 : 0}"
-  with_host = "host,classname,methodname"
-  without_host = "classname,methodname"
+  with_host = "{host,classname,methodname}"
+  without_host = "{classname,methodname}"
   alert_by = "${var.alert_per_host ? local.with_host : local.without_host}"
 }
 
