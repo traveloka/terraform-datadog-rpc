@@ -11,6 +11,7 @@ module "rpc" {
   warning_recipients = ["slack-bei"]
   renotify_interval  = 0
   notify_audit       = false
+  alert_per_host     = true
 
   server_latency_p95_thresholds = {
     critical = 1000

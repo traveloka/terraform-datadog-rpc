@@ -4,6 +4,12 @@ variable "enabled" {
   description = "To enable this module"
 }
 
+variable "alert_per_host" {
+  type        = "string"
+  default     = true
+  description = "To enable alert per host instead of per cluster"
+}
+
 variable "product_domain" {
   type        = "string"
   description = "The name of the product domain"
