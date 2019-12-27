@@ -163,7 +163,9 @@ module "monitor_server_latency_p95" {
   tags           = "${var.tags}"
   timeboard_id   = "${join(",", datadog_timeboard.rpc.*.id)}"
 
-  name               = "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Server Latency is High on Class: {{ classname }} Method: {{ methodname }}"
+  name               = "${var.server_latency_p95_name != "" ? 
+                        "${var.server_latency_p95_name}" : 
+                        "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Server Latency is High on Class: {{ classname }} Method: {{ methodname }}"}"
   query              = "${coalesce(var.server_latency_p95_custom_query, "avg(last_1m):avg:rpc.server.ltcy.p95{cluster:${var.cluster}, environment:${var.environment}} by ${local.alert_by} >= ${var.server_latency_p95_thresholds["critical"]}")}"
   thresholds         = "${var.server_latency_p95_thresholds}"
   message            = "${var.server_latency_p95_message}"
@@ -175,6 +177,7 @@ module "monitor_server_latency_p95" {
 
   renotify_interval = "${var.renotify_interval}"
   notify_audit      = "${var.notify_audit}"
+  include_tags      = "${var.server_latency_p95_include_tags}"
 }
 
 module "monitor_server_exception" {
@@ -187,7 +190,9 @@ module "monitor_server_exception" {
   tags           = "${var.tags}"
   timeboard_id   = "${join(",", datadog_timeboard.rpc.*.id)}"
 
-  name               = "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Server Exception is High on Class: {{ classname }} Method: {{ methodname }}"
+  name               = "${var.server_exception_name != "" ? 
+                        "${var.server_exception_name}" : 
+                        "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Server Exception is High on Class: {{ classname }} Method: {{ methodname }}"}"
   query              = "${coalesce(var.server_exception_custom_query, "avg(last_1m):avg:rpc.server.exc.count{cluster:${var.cluster}, environment:${var.environment}} by ${local.alert_by} >= ${var.server_exception_thresholds["critical"]}")}"
   thresholds         = "${var.server_exception_thresholds}"
   message            = "${var.server_exception_message}"
@@ -199,6 +204,7 @@ module "monitor_server_exception" {
 
   renotify_interval = "${var.renotify_interval}"
   notify_audit      = "${var.notify_audit}"
+  include_tags      = "${var.server_exception_include_tags}"
 }
 
 module "monitor_client_latency_p95" {
@@ -211,7 +217,9 @@ module "monitor_client_latency_p95" {
   tags           = "${var.tags}"
   timeboard_id   = "${join(",", datadog_timeboard.rpc.*.id)}"
 
-  name               = "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Client Latency is High on Method: {{ methodname }} Destination: {{ destnodeid }}"
+  name               = "${var.client_latency_p95_name != "" ? 
+                        "${var.client_latency_p95_name}" : 
+                        "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Client Latency is High on Method: {{ methodname }} Destination: {{ destnodeid }}"}"
   query              = "${coalesce(var.client_latency_p95_custom_query, "avg(last_1m):avg:rpc.client.ltcy.p95{cluster:${var.cluster}, environment:${var.environment}} by ${local.alert_by} >= ${var.client_latency_p95_thresholds["critical"]}")}"
   thresholds         = "${var.client_latency_p95_thresholds}"
   message            = "${var.client_latency_p95_message}"
@@ -223,6 +231,7 @@ module "monitor_client_latency_p95" {
 
   renotify_interval = "${var.renotify_interval}"
   notify_audit      = "${var.notify_audit}"
+  include_tags      = "${var.client_latency_p95_include_tags}"
 }
 
 module "monitor_client_exception" {
@@ -235,7 +244,9 @@ module "monitor_client_exception" {
   tags           = "${var.tags}"
   timeboard_id   = "${join(",", datadog_timeboard.rpc.*.id)}"
 
-  name               = "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Client Exception is High on Method: {{ methodname }} Destination: {{ destnodeid }}"
+  name               = "${var.client_exception_name != "" ? 
+                        "${var.client_exception_name}" : 
+                        "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Client Exception is High on Method: {{ methodname }} Destination: {{ destnodeid }}"}"
   query              = "${coalesce(var.client_exception_custom_query, "avg(last_1m):avg:rpc.client.exc.count{cluster:${var.cluster}, environment:${var.environment}} by ${local.alert_by} >= ${var.client_exception_thresholds["critical"]}")}"
   thresholds         = "${var.client_exception_thresholds}"
   message            = "${var.client_exception_message}"
@@ -247,6 +258,7 @@ module "monitor_client_exception" {
 
   renotify_interval = "${var.renotify_interval}"
   notify_audit      = "${var.notify_audit}"
+  include_tags      = "${var.client_exception_include_tags}"
 }
 
 module "monitor_circuit_breaker_status" {
@@ -259,7 +271,9 @@ module "monitor_circuit_breaker_status" {
   tags           = "${var.tags}"
   timeboard_id   = "${join(",", datadog_timeboard.rpc.*.id)}"
 
-  name               = "${var.product_domain} - ${var.cluster} - ${var.environment} - Circuit Breaker is Open on Class: {{ classname }} Method: {{ methodname }}"
+  name               = "${var.circuit_breaker_status_name != "" ? 
+                        "${var.circuit_breaker_status_name}" : 
+                        "${var.product_domain} - ${var.cluster} - ${var.environment} - Circuit Breaker is Open on Class: {{ classname }} Method: {{ methodname }}"}"
   query              = "${coalesce(var.circuit_breaker_status_custom_query, "avg(last_1m):avg:CircuitBreaker.status.lastNumber{cluster:${var.cluster}, environment:${var.environment}} by ${local.alert_by} >= ${var.circuit_breaker_status_thresholds["critical"]}")}" 
   thresholds         = "${var.circuit_breaker_status_thresholds}"
   message            = "${var.circuit_breaker_status_message}"
@@ -271,4 +285,5 @@ module "monitor_circuit_breaker_status" {
 
   renotify_interval = "${var.renotify_interval}"
   notify_audit      = "${var.notify_audit}"
+  include_tags      = "${var.circuit_breaker_status_include_tags}"
 }
