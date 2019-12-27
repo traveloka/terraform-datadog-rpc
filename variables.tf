@@ -67,6 +67,12 @@ variable "notify_audit" {
   description = "Whether any configuration changes should be notified"
 }
 
+variable "server_latency_p95_name" {
+  type        = "string"
+  default     = ""
+  description = "The name for RPC Server Latency P95 monitor, else use default"
+}
+
 variable "server_latency_p95_thresholds" {
   type = "map"
 
@@ -87,6 +93,18 @@ variable "server_latency_p95_escalation_message" {
   type        = "string"
   default     = ""
   description = "The escalation message when RPC Server Latency P95 monitor isn't resolved for given time"
+}
+
+variable "server_latency_p95_include_tags" {
+  type        = "string"
+  default     = true
+  description = "The flag to include tags in name for RPC Server Latency P95 monitor"
+}
+
+variable "server_exception_name" {
+  type        = "string"
+  default     = ""
+  description = "The name for RPC Server Exception monitor, else use default"
 }
 
 variable "server_exception_thresholds" {
@@ -111,6 +129,18 @@ variable "server_exception_escalation_message" {
   description = "The escalation message when RPC Server Exception monitor isn't resolved for given time"
 }
 
+variable "server_exception_include_tags" {
+  type        = "string"
+  default     = true
+  description = "The flag to include tags in name for RPC Server Exception monitor"
+}
+
+variable "client_latency_p95_name" {
+  type        = "string"
+  default     = ""
+  description = "The name for RPC Client Latency P95 monitor, else use default"
+}
+
 variable "client_latency_p95_thresholds" {
   type = "map"
 
@@ -131,6 +161,18 @@ variable "client_latency_p95_escalation_message" {
   type        = "string"
   default     = ""
   description = "The escalation message when RPC Client Latency P95 monitor isn't resolved for given time"
+}
+
+variable "client_latency_p95_include_tags" {
+  type        = "string"
+  default     = true
+  description = "The flag to include tags in name for RPC Client Latency P95 monitor"
+}
+
+variable "client_exception_name" {
+  type        = "string"
+  default     = ""
+  description = "The name for RPC Client Exception monitor, else use default"
 }
 
 variable "client_exception_thresholds" {
@@ -155,6 +197,18 @@ variable "client_exception_escalation_message" {
   description = "The escalation message when RPC Client Exception monitor isn't resolved for given time"
 }
 
+variable "client_exception_include_tags" {
+  type        = "string"
+  default     = true
+  description = "The flag to include tags in name for RPC Client Exception monitor"
+}
+
+variable "circuit_breaker_status_name" {
+  type        = "string"
+  default     = ""
+  description = "The name for RPC Circuit Breaker Status monitor, else use default"
+}
+
 variable "circuit_breaker_status_thresholds" {
   type = "map"
 
@@ -175,6 +229,12 @@ variable "circuit_breaker_status_escalation_message" {
   type        = "string"
   default     = ""
   description = "The escalation message when RPC Circuit Breaker Status monitor isn't resolved for given time"
+}
+
+variable "circuit_breaker_status_include_tags" {
+  type        = "string"
+  default     = true
+  description = "The flag to include tags in name for RPC Circuit Breaker Status monitor"
 }
 
 variable "server_exception_custom_query" {
