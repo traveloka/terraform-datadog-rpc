@@ -18,7 +18,7 @@ resource "datadog_timeboard" "rpc" {
   }
 
   template_variable {
-    default = "*"
+    default = "${var.environment}"
     name    = "environment"
     prefix  = "environment"
   }
@@ -109,7 +109,7 @@ resource "datadog_timeboard" "rpc" {
     autoscale = true
 
     request {
-      q    = "sum:rpc.server.exc.count{$cluster, $environment,$classname,$methodname, $srcnodeid} by {host,name,classname,methodname,srcnodeid,task_arnx  }.rollup(sum)"
+      q    = "sum:rpc.server.exc.count{$cluster, $environment,$classname,$methodname, $srcnodeid} by {host,name,classname,methodname,srcnodeid,task_arn}.rollup(sum)"
       type = "line"
     }
   }
