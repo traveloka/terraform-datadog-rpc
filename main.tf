@@ -18,7 +18,7 @@ resource "datadog_timeboard" "rpc" {
   }
 
   template_variable {
-    default = "${var.environment}"
+    default = "*"
     name    = "environment"
     prefix  = "environment"
   }
@@ -53,7 +53,7 @@ resource "datadog_timeboard" "rpc" {
     autoscale = true
 
     request {
-      q = "sum:rpc.client.count{$cluster, $environment, $methodname, $destnodeid} by {host,name,destnodeid}.rollup(sum)"
+      q = "sum:rpc.client.count{$cluster, $environment, $methodname, $destnodeid} by {host,name,destnodeid,task_arn}.rollup(sum)"
 
       type = "line"
     }
@@ -65,7 +65,7 @@ resource "datadog_timeboard" "rpc" {
     autoscale = true
 
     request {
-      q    = "max:rpc.client.ltcy.p95{$cluster, $environment, $methodname, $destnodeid} by {host,name,destnodeid}"
+      q    = "max:rpc.client.ltcy.p95{$cluster, $environment, $methodname, $destnodeid} by {host,name,destnodeid,task_arn}"
       type = "line"
     }
   }
@@ -76,7 +76,7 @@ resource "datadog_timeboard" "rpc" {
     autoscale = true
 
     request {
-      q    = "sum:rpc.client.exc.count{$cluster, $environment, $methodname, $destnodeid} by {host,name,destnodeid}.rollup(sum)"
+      q    = "sum:rpc.client.exc.count{$cluster, $environment, $methodname, $destnodeid} by {host,name,destnodeid,task_arn}.rollup(sum)"
       type = "line"
     }
   }
@@ -87,7 +87,7 @@ resource "datadog_timeboard" "rpc" {
     autoscale = true
 
     request {
-      q    = "sum:rpc.server.count{$cluster, $environment,$classname,$methodname, $srcnodeid} by {host,name,classname,methodname,srcnodeid}.rollup(sum)"
+      q    = "sum:rpc.server.count{$cluster, $environment,$classname,$methodname, $srcnodeid} by {host,name,classname,methodname,srcnodeid,task_arn}.rollup(sum)"
       type = "line"
     }
   }
@@ -98,7 +98,7 @@ resource "datadog_timeboard" "rpc" {
     autoscale = true
 
     request {
-      q    = "max:rpc.server.ltcy.p95{$cluster, $environment,$classname,$methodname, $srcnodeid} by {host,name,classname,methodname,srcnodeid}"
+      q    = "max:rpc.server.ltcy.p95{$cluster, $environment,$classname,$methodname, $srcnodeid} by {host,name,classname,methodname,srcnodeid,task_arn}"
       type = "line"
     }
   }
@@ -109,7 +109,7 @@ resource "datadog_timeboard" "rpc" {
     autoscale = true
 
     request {
-      q    = "sum:rpc.server.exc.count{$cluster, $environment,$classname,$methodname, $srcnodeid} by {host,name,classname,methodname,srcnodeid}.rollup(sum)"
+      q    = "sum:rpc.server.exc.count{$cluster, $environment,$classname,$methodname, $srcnodeid} by {host,name,classname,methodname,srcnodeid,task_arnx  }.rollup(sum)"
       type = "line"
     }
   }
