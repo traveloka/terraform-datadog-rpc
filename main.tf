@@ -1,8 +1,11 @@
 locals {
   monitor_enabled = "${var.enabled && length(var.recipients) > 0 ? 1 : 0}"
-  with_host = "{host,classname,methodname}"
-  without_host = "{classname,methodname}"
-  alert_by = "${var.alert_per_host ? local.with_host : local.without_host}"
+  server_with_host = "{host,classname,methodname}"
+  server_without_host = "{classname,methodname}"
+  server_alert_by = "${var.alert_per_host ? local.server_with_host : local.server_without_host}"
+  client_with_host = "{host,destnodeid,methodname}"
+  client_without_host = "{destnodeid,methodname}"
+  client_alert_by = "${var.alert_per_host ? local.client_with_host : local.client_without_host}"
 }
 
 resource "datadog_timeboard" "rpc" {
@@ -166,7 +169,7 @@ module "monitor_server_latency_p95" {
   name               = "${var.server_latency_p95_name != "" ? 
                         "${var.server_latency_p95_name}" : 
                         "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Server Latency is High on Class: {{ classname }} Method: {{ methodname }}"}"
-  query              = "${coalesce(var.server_latency_p95_custom_query, "avg(last_1m):avg:rpc.server.ltcy.p95{cluster:${var.cluster}, environment:${var.environment}} by ${local.alert_by} >= ${var.server_latency_p95_thresholds["critical"]}")}"
+  query              = "${coalesce(var.server_latency_p95_custom_query, "avg(last_1m):avg:rpc.server.ltcy.p95{cluster:${var.cluster}, environment:${var.environment}} by ${local.server_alert_by} >= ${var.server_latency_p95_thresholds["critical"]}")}"
   thresholds         = "${var.server_latency_p95_thresholds}"
   message            = "${var.server_latency_p95_message}"
   escalation_message = "${var.server_latency_p95_escalation_message}"
@@ -193,7 +196,7 @@ module "monitor_server_exception" {
   name               = "${var.server_exception_name != "" ? 
                         "${var.server_exception_name}" : 
                         "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Server Exception is High on Class: {{ classname }} Method: {{ methodname }}"}"
-  query              = "${coalesce(var.server_exception_custom_query, "avg(last_1m):avg:rpc.server.exc.count{cluster:${var.cluster}, environment:${var.environment}} by ${local.alert_by} >= ${var.server_exception_thresholds["critical"]}")}"
+  query              = "${coalesce(var.server_exception_custom_query, "avg(last_1m):avg:rpc.server.exc.count{cluster:${var.cluster}, environment:${var.environment}} by ${local.server_alert_by} >= ${var.server_exception_thresholds["critical"]}")}"
   thresholds         = "${var.server_exception_thresholds}"
   message            = "${var.server_exception_message}"
   escalation_message = "${var.server_exception_escalation_message}"
@@ -220,7 +223,7 @@ module "monitor_client_latency_p95" {
   name               = "${var.client_latency_p95_name != "" ? 
                         "${var.client_latency_p95_name}" : 
                         "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Client Latency is High on Method: {{ methodname }} Destination: {{ destnodeid }}"}"
-  query              = "${coalesce(var.client_latency_p95_custom_query, "avg(last_1m):avg:rpc.client.ltcy.p95{cluster:${var.cluster}, environment:${var.environment}} by ${local.alert_by} >= ${var.client_latency_p95_thresholds["critical"]}")}"
+  query              = "${coalesce(var.client_latency_p95_custom_query, "avg(last_1m):avg:rpc.client.ltcy.p95{cluster:${var.cluster}, environment:${var.environment}} by ${local.client_alert_by} >= ${var.client_latency_p95_thresholds["critical"]}")}"
   thresholds         = "${var.client_latency_p95_thresholds}"
   message            = "${var.client_latency_p95_message}"
   escalation_message = "${var.client_latency_p95_escalation_message}"
@@ -247,7 +250,7 @@ module "monitor_client_exception" {
   name               = "${var.client_exception_name != "" ? 
                         "${var.client_exception_name}" : 
                         "${var.product_domain} - ${var.cluster} - ${var.environment} - RPC Client Exception is High on Method: {{ methodname }} Destination: {{ destnodeid }}"}"
-  query              = "${coalesce(var.client_exception_custom_query, "avg(last_1m):avg:rpc.client.exc.count{cluster:${var.cluster}, environment:${var.environment}} by ${local.alert_by} >= ${var.client_exception_thresholds["critical"]}")}"
+  query              = "${coalesce(var.client_exception_custom_query, "avg(last_1m):avg:rpc.client.exc.count{cluster:${var.cluster}, environment:${var.environment}} by ${local.client_alert_by} >= ${var.client_exception_thresholds["critical"]}")}"
   thresholds         = "${var.client_exception_thresholds}"
   message            = "${var.client_exception_message}"
   escalation_message = "${var.client_exception_escalation_message}"
@@ -274,7 +277,7 @@ module "monitor_circuit_breaker_status" {
   name               = "${var.circuit_breaker_status_name != "" ? 
                         "${var.circuit_breaker_status_name}" : 
                         "${var.product_domain} - ${var.cluster} - ${var.environment} - Circuit Breaker is Open on Class: {{ classname }} Method: {{ methodname }}"}"
-  query              = "${coalesce(var.circuit_breaker_status_custom_query, "avg(last_1m):avg:CircuitBreaker.status.lastNumber{cluster:${var.cluster}, environment:${var.environment}} by ${local.alert_by} >= ${var.circuit_breaker_status_thresholds["critical"]}")}" 
+  query              = "${coalesce(var.circuit_breaker_status_custom_query, "avg(last_1m):avg:CircuitBreaker.status.lastNumber{cluster:${var.cluster}, environment:${var.environment}} by ${local.server_alert_by} >= ${var.circuit_breaker_status_thresholds["critical"]}")}" 
   thresholds         = "${var.circuit_breaker_status_thresholds}"
   message            = "${var.circuit_breaker_status_message}"
   escalation_message = "${var.circuit_breaker_status_escalation_message}"
